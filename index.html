@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>التسجيل في زمالة التمكين المهني</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#b89d5a; --gold-d:#9f834d; --gold-l:#f3ecdc; --ink:#2f2f2f; --muted:#6b6b6b;
+  --line:#e6e2d6; --bg:#faf9f4; --card:#fff; --err:#c0392b; --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tajawal,system-ui,sans-serif;font-size:16px;line-height:1.7}
+a{color:var(--gold-d)}
+
+/* الهيدر */
+.hero{position:relative;color:#fff;background:linear-gradient(180deg,rgba(143,116,64,.94),rgba(170,143,80,.86) 55%,rgba(184,157,90,.7)),url(assets/hero.jpg) center 30%/cover;padding:28px 16px 90px;text-align:center;overflow:hidden}
+.hero .logos{display:flex;justify-content:center;align-items:center;gap:22px;margin-bottom:26px}
+.hero .logos img{height:58px;width:auto}
+.hero .logos span{width:1px;height:44px;background:rgba(255,255,255,.6)}
+.hero small{display:block;font-weight:500;opacity:.9;letter-spacing:.5px}
+.hero h1{margin:4px 0 6px;font-size:clamp(28px,6vw,44px);font-weight:800;line-height:1.3}
+.hero p{margin:0 auto;max-width:560px;opacity:.95}
+.facts{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:22px}
+.facts div{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 16px;font-weight:500;font-size:15px;backdrop-filter:blur(4px)}
+
+main{max-width:760px;margin:-60px auto 0;padding:0 16px 40px;position:relative}
+.intro,.sec{background:var(--card);border-radius:var(--r);box-shadow:0 6px 24px rgba(80,60,20,.08);padding:24px 22px;margin-bottom:18px}
+.intro{border-top:5px solid var(--gold)}
+.intro p{margin:0}
+.req-note{color:var(--muted);font-size:14px;margin-top:8px!important}
+.req-note b,.star{color:var(--err)}
+
+/* عناوين الأقسام بنفس شكل الشريط الذهبي في الدليل */
+.sec-title{display:inline-block;background:var(--gold);color:#fff;font-weight:700;border-radius:999px;padding:6px 22px;margin:-4px 0 18px;font-size:17px}
+
+.q{padding:14px 0;border-bottom:1px solid var(--line)}
+.q:last-child{border-bottom:0;padding-bottom:0}
+.q>label,.q>.lbl{display:block;font-weight:700;margin-bottom:8px}
+.hint{display:block;color:var(--muted);font-weight:400;font-size:14px;margin-top:-4px;margin-bottom:8px}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+  width:100%;font:inherit;color:inherit;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;outline:none;transition:border-color .15s,box-shadow .15s}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,157,90,.18)}
+.phone{display:flex;direction:ltr}
+.phone span{background:var(--gold-l);border:1.5px solid var(--line);border-right:0;border-radius:10px 0 0 10px;padding:11px 12px;font-weight:700;color:var(--gold-d)}
+.phone input{border-radius:0 10px 10px 0;direction:ltr;text-align:left}
+
+/* خيارات على شكل بطاقات */
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.opt span{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:10px;padding:9px 16px;cursor:pointer;background:#fff;transition:all .15s;user-select:none}
+.opt span::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid #c9c2ae;flex:none;transition:all .15s}
+.opt input[type=checkbox]+span::before{border-radius:4px}
+.opt input:checked+span{border-color:var(--gold);background:var(--gold-l);color:var(--gold-d);font-weight:700}
+.opt input:checked+span::before{border-color:var(--gold);background:var(--gold);box-shadow:inset 0 0 0 3px #fff}
+.opt input:focus-visible+span{box-shadow:0 0 0 3px rgba(184,157,90,.35)}
+.opts.col{flex-direction:column}
+.other{margin-top:10px}
+.cond{display:none}
+.cond.show{display:block}
+
+.err-msg{display:none;color:var(--err);font-size:14px;margin-top:6px}
+.q.invalid .err-msg{display:block}
+.q.invalid input:not([type=radio]):not([type=checkbox]),.q.invalid select,.q.invalid textarea{border-color:var(--err)}
+.q.invalid .opt span{border-color:#e7b7b1}
+
+.contact{display:flex;align-items:center;gap:14px;background:var(--gold-l);border-radius:12px;padding:14px 16px}
+.contact svg{flex:none}
+.contact p{margin:0}
+
+.actions{display:flex;gap:12px;align-items:center;margin-top:8px}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;cursor:pointer}
+.submit{background:var(--gold);color:#fff;padding:14px 40px;font-size:18px;box-shadow:0 6px 16px rgba(159,131,77,.35);transition:background .15s}
+.submit:hover{background:var(--gold-d)}
+.submit:disabled{opacity:.6;cursor:wait}
+.form-err{color:var(--err);font-weight:500}
+
+.done{display:none;text-align:center;padding:48px 22px}
+.done .tick{width:72px;height:72px;border-radius:50%;background:var(--gold);color:#fff;display:grid;place-items:center;margin:0 auto 16px}
+.done h2{margin:0 0 8px;color:var(--gold-d)}
+
+footer{background:#3b3a36;color:#e9e4d6;text-align:center;padding:28px 16px;font-size:14px}
+footer .partner{display:flex;justify-content:center;align-items:center;gap:14px;margin-bottom:12px}
+footer img{height:44px}
+footer a{color:#e9e4d6}
+@media (max-width:520px){
+  .hero .logos img{height:44px}
+  .intro,.sec{padding:20px 16px}
+  .opt span{padding:8px 13px}
+  .submit{width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="logos">
+    <img src="assets/waqf.png" alt="الوقف العلمي - جامعة الملك عبدالعزيز">
+    <span></span>
+    <img src="assets/rasikh.png" alt="شركة راسخ - الشريك التنفيذي">
+  </div>
+  <small>نموذج التسجيل</small>
+  <h1>زمالة التمكين المهني لسوق العمل</h1>
+  <p>رحلة تأهيل متكاملة تبدأ باكتشاف نقاط قوتك، وتنتهي بخطة مسار مهني واضحة.</p>
+  <div class="facts"><div>عن بُعد</div><div>الفترة المسائية</div><div>بمعدل 9 ساعات أسبوعيًا</div></div>
+</header>
+
+<main>
+  <div class="intro" id="introCard">
+    <p>نسعد باهتمامك بالانضمام إلى الزمالة. يستغرق تعبئة النموذج قرابة 5 دقائق.</p>
+    <p class="req-note">الحقول المشار إليها بـ <b>*</b> مطلوبة.</p>
+  </div>
+
+  <form id="f" novalidate>
+    <section class="sec">
+      <div class="sec-title">أولاً: البيانات الشخصية</div>
+
+      <div class="q" data-req>
+        <label for="name">الاسم الثلاثي <span class="star">*</span></label>
+        <input type="text" id="name" name="entry.400744829" autocomplete="name">
+        <div class="err-msg">اكتب اسمك الثلاثي</div>
+      </div>
+
+      <div class="q" data-req>
+        <div class="lbl">الجنس <span class="star">*</span></div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="entry.1672470170" value="ذكر"><span>ذكر</span></label>
+          <label class="opt"><input type="radio" name="entry.1672470170" value="أنثى"><span>أنثى</span></label>
+        </div>
+        <div class="err-msg">اختر الجنس</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="dob">تاريخ الميلاد <span class="star">*</span></label>
+        <input type="date" id="dob" name="entry.224616728" min="1960-01-01" max="2010-12-31">
+        <div class="err-msg">اختر تاريخ ميلادك من التقويم</div>
+      </div>
+
+      <div class="q" data-req>
+        <div class="lbl">أين مقر إقامتك الحالي؟ <span class="star">*</span></div>
+        <div class="opts" data-other="cityOther">
+          <label class="opt"><input type="radio" name="entry.420196996" value="جدة" data-as-other><span>جدة</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="مكة"><span>مكة</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="المدينة"><span>المدينة</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="الرياض"><span>الرياض</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="المنطقة الشرقية"><span>المنطقة الشرقية</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="أبها"><span>أبها</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="القصيم"><span>القصيم</span></label>
+          <label class="opt"><input type="radio" name="entry.420196996" value="__other_option__"><span>أخرى</span></label>
+        </div>
+        <input type="text" class="other cond" id="cityOther" name="entry.420196996.other_option_response" placeholder="اذكر المدينة">
+        <div class="err-msg">اختر مدينتك، أو اكتبها في «أخرى»</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="email">البريد الإلكتروني <span class="star">*</span></label>
+        <input type="email" id="email" name="entry.1169314863" autocomplete="email" dir="ltr" placeholder="name@example.com">
+        <div class="err-msg">اكتب بريدًا إلكترونيًا صحيحًا</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="phone">رقم الجوال <span class="star">*</span></label>
+        <div class="phone"><span>+966</span><input type="tel" id="phone" inputmode="numeric" maxlength="10" placeholder="5XXXXXXXX" autocomplete="tel-national"></div>
+        <div class="err-msg">اكتب رقم جوال سعودي يبدأ بـ 5 ومكوّن من 9 أرقام</div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-title">ثانياً: المؤهل والوضع الحالي</div>
+
+      <div class="q" data-req>
+        <div class="lbl">المؤهل العلمي <span class="star">*</span></div>
+        <div class="opts" data-other="qualOther">
+          <label class="opt"><input type="radio" name="entry.276447097" value="بكالوريوس"><span>بكالوريوس</span></label>
+          <label class="opt"><input type="radio" name="entry.276447097" value="ماجستير"><span>ماجستير</span></label>
+          <label class="opt"><input type="radio" name="entry.276447097" value="دكتوراه"><span>دكتوراه</span></label>
+          <label class="opt"><input type="radio" name="entry.276447097" value="__other_option__"><span>أخرى</span></label>
+        </div>
+        <input type="text" class="other cond" id="qualOther" name="entry.276447097.other_option_response" placeholder="اذكر المؤهل">
+        <div class="err-msg">اختر مؤهلك العلمي</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="major">ما تخصصك الجامعي؟ <span class="star">*</span></label>
+        <input type="text" id="major" name="entry.4095990">
+        <div class="err-msg">اكتب تخصصك</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="uni">الجامعة <span class="star">*</span></label>
+        <span class="hint">الجامعة التي تخرجت منها، أو التي تدرس بها حاليًا</span>
+        <input type="text" id="uni" name="entry.832678092">
+        <div class="err-msg">اكتب اسم الجامعة</div>
+      </div>
+
+      <div class="q">
+        <label for="grad">إن لم تتخرج بعد: ما العام المتوقع لتخرجك؟</label>
+        <select id="grad" name="entry.933776984">
+          <option value="">— تخرجت بالفعل —</option>
+          <option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <div class="lbl">ماذا تعمل حاليًا؟</div>
+        <div class="opts col" data-other="workOther">
+          <label class="opt"><input type="radio" name="entry.198540727" value="باحث عن عمل"><span>باحث عن عمل</span></label>
+          <label class="opt"><input type="radio" name="entry.198540727" value="موظف في نفس مجال تخصصي الأكاديمي" data-show="employer"><span>موظف في نفس مجال تخصصي الأكاديمي</span></label>
+          <label class="opt"><input type="radio" name="entry.198540727" value="موظف في مجال مختلف عن تخصصي الأكاديمي" data-show="employer"><span>موظف في مجال مختلف عن تخصصي الأكاديمي</span></label>
+          <label class="opt"><input type="radio" name="entry.198540727" value="عمل حر / مشروع خاص"><span>عمل حر / مشروع خاص</span></label>
+          <label class="opt"><input type="radio" name="entry.198540727" value="طالب دراسات عليا" data-show="pg"><span>طالب دراسات عليا</span></label>
+          <label class="opt"><input type="radio" name="entry.198540727" value="__other_option__"><span>أخرى</span></label>
+        </div>
+        <input type="text" class="other cond" id="workOther" name="entry.198540727.other_option_response" placeholder="اذكر عملك">
+      </div>
+
+      <div class="q cond" id="employer">
+        <label for="emp">ما جهة العمل؟</label>
+        <input type="text" id="emp" name="entry.154519348">
+      </div>
+
+      <div class="q cond" id="pg">
+        <label for="pgi">ما تخصصك في الدراسات العليا؟ وفي أي جامعة؟</label>
+        <input type="text" id="pgi" name="entry.136916052">
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-title">ثالثاً: المسار المهني</div>
+
+      <div class="q" data-req>
+        <div class="lbl">هل سبق لك الحصول على شهادة احترافية؟ <span class="star">*</span></div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="entry.1475509289" value="نعم" data-show="certQ"><span>نعم</span></label>
+          <label class="opt"><input type="radio" name="entry.1475509289" value="لا"><span>لا</span></label>
+        </div>
+        <div class="err-msg">اختر نعم أو لا</div>
+      </div>
+
+      <div class="q cond" id="certQ">
+        <label for="cert">اذكر الشهادة</label>
+        <input type="text" id="cert" name="entry.2002286855">
+      </div>
+
+      <div class="q" data-req>
+        <div class="lbl">ما المسار المهني الذي ترغب في العمل فيه مستقبلًا؟ <span class="star">*</span></div>
+        <div class="opts" data-other="trackOther">
+          <label class="opt"><input type="radio" name="entry.1069004595" value="الحوكمة والالتزام"><span>الحوكمة والالتزام</span></label>
+          <label class="opt"><input type="radio" name="entry.1069004595" value="الإدارة المالية"><span>الإدارة المالية</span></label>
+          <label class="opt"><input type="radio" name="entry.1069004595" value="إدارة الموارد البشرية"><span>إدارة الموارد البشرية</span></label>
+          <label class="opt"><input type="radio" name="entry.1069004595" value="إدارة المشاريع"><span>إدارة المشاريع</span></label>
+          <label class="opt"><input type="radio" name="entry.1069004595" value="__other_option__"><span>أخرى</span></label>
+        </div>
+        <input type="text" class="other cond" id="trackOther" name="entry.1069004595.other_option_response" placeholder="اذكر المسار">
+        <div class="err-msg">اختر مسارًا</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="goal">ما أبرز هدف ترغب في تحقيقه من انضمامك للزمالة؟ <span class="star">*</span></label>
+        <input type="text" id="goal" name="entry.67713399">
+        <div class="err-msg">اكتب هدفك</div>
+      </div>
+
+      <div class="q" data-req>
+        <label for="chal">ما أبرز تحدٍّ تواجهه حاليًا في دخول سوق العمل أو بناء مسارك المهني؟ <span class="star">*</span></label>
+        <input type="text" id="chal" name="entry.1603746590">
+        <div class="err-msg">اكتب التحدي</div>
+      </div>
+
+      <div class="q">
+        <div class="lbl">كيف تعرفت على الزمالة؟</div>
+        <div class="opts" data-other="heardOther">
+          <label class="opt"><input type="radio" name="entry.1603233492" value="X"><span>X</span></label>
+          <label class="opt"><input type="radio" name="entry.1603233492" value="WhatsApp"><span>واتساب</span></label>
+          <label class="opt"><input type="radio" name="entry.1603233492" value="صديق / زميل"><span>صديق / زميل</span></label>
+          <label class="opt"><input type="radio" name="entry.1603233492" value="الجامعة"><span>الجامعة</span></label>
+          <label class="opt"><input type="radio" name="entry.1603233492" value="__other_option__"><span>أخرى</span></label>
+        </div>
+        <input type="text" class="other cond" id="heardOther" name="entry.1603233492.other_option_response" placeholder="اذكر المصدر">
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-title">رابعاً: المشاركة في البرنامج</div>
+
+      <div class="q" data-req>
+        <div class="lbl">هل تستطيع الالتزام بالمشاركة في لقاءات البرنامج خلال الفترة المسائية؟ <span class="star">*</span></div>
+        <span class="hint">علمًا بأن جميع اللقاءات عن بُعد.</span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="entry.686873662" value="نعم"><span>نعم</span></label>
+          <label class="opt"><input type="radio" name="entry.686873662" value="لا"><span>لا</span></label>
+        </div>
+        <div class="err-msg">اختر نعم أو لا</div>
+      </div>
+
+      <div class="q" data-req>
+        <div class="lbl">ما الأيام التي تفضّلها للقاءات؟ <span class="star">*</span></div>
+        <span class="hint">يُعقد البرنامج من 2 إلى 3 أيام أسبوعيًا، ويمكنك اختيار أكثر من يوم.</span>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="السبت"><span>السبت</span></label>
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="الأحد"><span>الأحد</span></label>
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="الإثنين"><span>الإثنين</span></label>
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="الثلاثاء"><span>الثلاثاء</span></label>
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="الأربعاء"><span>الأربعاء</span></label>
+        </div>
+        <div class="err-msg">اختر يومًا واحدًا على الأقل</div>
+      </div>
+
+      <div class="q">
+        <label for="notes">ملاحظات أو مقترحات</label>
+        <textarea id="notes" name="entry.115876511" placeholder="اكتب أي ملاحظة أو مقترح تود مشاركته معنا"></textarea>
+      </div>
+
+      <div class="q" data-req>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="entry.285915384" value="أقر بذلك"><span>أقر بصحة البيانات المدخلة، وأتفهم أن تعبئة هذا النموذج لا تعني القبول النهائي في الزمالة، وأن القبول يخضع لاستيفاء متطلبات البرنامج وتوفر المقاعد. <span class="star">*</span></span></label>
+        </div>
+        <div class="err-msg">يلزم الإقرار قبل الإرسال</div>
+      </div>
+
+      <div class="q">
+        <div class="contact">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#9f834d" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+          <p>لديك استفسار؟ تواصل معنا مباشرة عبر واتساب:<br><a href="https://wa.me/966548233030" target="_blank" rel="noopener" dir="ltr">+966 54 823 3030</a></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="submit" class="submit" id="send">إرسال الطلب</button>
+      <span class="form-err" id="formErr"></span>
+    </div>
+  </form>
+
+  <section class="sec done" id="done">
+    <div class="tick"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>
+    <h2>تم استلام طلبك بنجاح</h2>
+    <p>شكرًا لاهتمامك بزمالة التمكين المهني لسوق العمل، وسنتواصل معك قريبًا.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="partner"><span>الشريك التنفيذي</span><img src="assets/rasikh.png" alt="شركة راسخ"></div>
+  <div>الوقف العلمي بجامعة الملك عبدالعزيز · <a href="https://x.com/WAQF_KAU" target="_blank" rel="noopener" dir="ltr">@WAQF_KAU</a></div>
+</footer>
+
+<script>
+const ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfp5R8P3rfhDxYQU_0LOmZqgv-rs2Cb6FHxxiKD0XHkM9HkgQ/formResponse';
+const f = document.getElementById('f');
+
+// إظهار حقل «أخرى» والأسئلة الشرطية حسب الاختيار
+f.addEventListener('change', e => {
+  const t = e.target;
+  if (t.type !== 'radio') return;
+  const box = t.closest('.opts');
+  if (box.dataset.other) {
+    const o = document.getElementById(box.dataset.other);
+    o.classList.toggle('show', t.value === '__other_option__');
+    if (t.value === '__other_option__') o.focus();
+  }
+  box.querySelectorAll('[data-show]').forEach(r => document.getElementById(r.dataset.show).classList.remove('show'));
+  if (t.dataset.show) document.getElementById(t.dataset.show).classList.add('show');
+});
+f.addEventListener('input', e => e.target.closest('.q')?.classList.remove('invalid'));
+f.addEventListener('change', e => e.target.closest('.q')?.classList.remove('invalid'));
+
+const phone = document.getElementById('phone');
+phone.addEventListener('input', () => {
+  // يقبل الأرقام العربية والإنجليزية ويحذف الصفر الأول (05...)
+  let v = phone.value.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g, '');
+  phone.value = v.replace(/^0/, '').slice(0, 9);
+});
+
+function qValid(q) {
+  const choices = q.querySelectorAll('input[type=radio],input[type=checkbox]');
+  if (choices.length) {
+    const sel = [...choices].find(c => c.checked);
+    if (!sel) return false;
+    const other = q.querySelector('.other');
+    return !(sel.value === '__other_option__' && other && !other.value.trim());
+  }
+  const el = q.querySelector('input,select,textarea');
+  const v = el.value.trim();
+  if (!v) return false;
+  if (el.type === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  if (el.id === 'phone') return /^5\d{8}$/.test(v);
+  if (el.type === 'date') return v >= el.min && v <= el.max;
+  return true;
+}
+
+function buildPayload() {
+  const p = new URLSearchParams();
+  for (const [k, v] of new FormData(f)) {
+    // لا نرسل نص «أخرى» إلا إذا كان الخيار نفسه «أخرى»
+    if (k.endsWith('.other_option_response') && !f.elements[k].classList.contains('show')) continue;
+    if (String(v).trim() !== '') p.append(k, String(v).trim());
+  }
+  // خيار غير موجود في Google Form (مثل جدة) يُرسل عبر «أخرى» وإلا يرفض Google الطلب كاملًا
+  f.querySelectorAll('[data-as-other]:checked').forEach(r => {
+    p.set(r.name, '__other_option__');
+    p.set(r.name + '.other_option_response', r.value);
+  });
+  p.append('entry.1444268495', '00966' + phone.value);
+  return p;
+}
+
+f.addEventListener('submit', async e => {
+  e.preventDefault();
+  const bad = [...f.querySelectorAll('.q[data-req]')].filter(q => !qValid(q));
+  f.querySelectorAll('.q').forEach(q => q.classList.toggle('invalid', bad.includes(q)));
+  const err = document.getElementById('formErr');
+  if (bad.length) {
+    err.textContent = 'أكمل الحقول المطلوبة (' + bad.length + ')';
+    bad[0].scrollIntoView({behavior: 'smooth', block: 'center'});
+    return;
+  }
+  err.textContent = '';
+  const btn = document.getElementById('send');
+  btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
+  try {
+    // no-cors: Google لا يسمح بقراءة الرد، فنعتبر الطلب ناجحًا ما لم تفشل الشبكة
+    await fetch(ACTION, {method: 'POST', mode: 'no-cors', body: buildPayload()});
+    f.style.display = 'none';
+    document.getElementById('introCard').style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+    scrollTo({top: 0, behavior: 'smooth'});
+  } catch {
+    err.textContent = 'تعذّر الإرسال، تحقق من الاتصال وحاول مرة أخرى';
+    btn.disabled = false; btn.textContent = 'إرسال الطلب';
+  }
+});
+</script>
+</body>
+</html>
