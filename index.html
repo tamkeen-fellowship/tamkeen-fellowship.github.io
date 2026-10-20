@@ -307,8 +307,10 @@ footer a{color:#e9e4d6}
           <label class="opt"><input type="checkbox" name="entry.470110634" value="الإثنين"><span>الإثنين</span></label>
           <label class="opt"><input type="checkbox" name="entry.470110634" value="الثلاثاء"><span>الثلاثاء</span></label>
           <label class="opt"><input type="checkbox" name="entry.470110634" value="الأربعاء"><span>الأربعاء</span></label>
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="الخميس" data-as-note><span>الخميس</span></label>
+          <label class="opt"><input type="checkbox" name="entry.470110634" value="الجمعة" data-as-note><span>الجمعة</span></label>
         </div>
-        <div class="err-msg">اختر يومًا واحدًا على الأقل</div>
+        <div class="err-msg">اختر يومًا واحدًا على الأقل من السبت إلى الأربعاء</div>
       </div>
 
       <div class="q">
@@ -381,6 +383,8 @@ function qValid(q) {
   if (choices.length) {
     const sel = [...choices].find(c => c.checked);
     if (!sel) return false;
+    // سؤال الأيام إجباري في Google: لا بد من يوم واحد على الأقل غير الخميس والجمعة
+    if (q.querySelector('[data-as-note]') && ![...choices].some(c => c.checked && !('asNote' in c.dataset))) return false;
     const other = q.querySelector('.other');
     return !(sel.value === '__other_option__' && other && !other.value.trim());
   }
@@ -405,6 +409,13 @@ function buildPayload() {
     p.set(r.name, '__other_option__');
     p.set(r.name + '.other_option_response', r.value);
   });
+  // shortcut: الخميس والجمعة غير موجودين في سؤال الأيام بـ Google Form، فتُحفظ في الملاحظات؛ احذف data-as-note بعد إضافتهما هناك
+  const extra = [...f.querySelectorAll('[data-as-note]:checked')].map(c => c.value);
+  if (extra.length) {
+    extra.forEach(v => { const all = p.getAll('entry.470110634').filter(d => d !== v); p.delete('entry.470110634'); all.forEach(d => p.append('entry.470110634', d)); });
+    const note = 'أيام إضافية مفضلة: ' + extra.join('، ');
+    p.set('entry.115876511', p.get('entry.115876511') ? note + ' | ' + p.get('entry.115876511') : note);
+  }
   p.append('entry.1444268495', '00966' + phone.value);
   return p;
 }
